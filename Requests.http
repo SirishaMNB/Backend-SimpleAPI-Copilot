@@ -1,0 +1,100 @@
+@baseUrl = http://localhost:5044
+
+### ✅ 1. LOGIN - Get JWT Token
+POST http://localhost:5044/login
+Content-Type: application/json
+
+{
+  "name": "admin",
+  "email": "admin@example.com"
+}
+
+### ✅ Save token manually after running above request
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJleHAiOjE3NzkwNDczMjZ9.zkxWeZah9-PEc_GeiWSa7sjMB724dto7C74TQUwZ2so
+
+
+### ✅ 2. GET All Users (Authorized)
+GET http://localhost:5044/users
+Authorization: Bearer {{token}}
+
+
+### ❌ 3. GET All Users (No Token - Should Fail)
+GET http://localhost:5044/users
+
+
+### ✅ 4. GET User by ID (Valid)
+GET http://localhost:5044/users/1
+Authorization: Bearer {{token}}
+
+
+### ❌ 5. GET User by ID (Not Found)
+GET http://localhost:5044/users/999
+Authorization: Bearer {{token}}
+
+
+### ✅ 6. CREATE User
+POST http://localhost:5044/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Alice",
+  "email": "alice@test.com"
+}
+
+
+### ❌ 7. CREATE User (Missing Name)
+POST http://localhost:5044/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "",
+  "email": "test@test.com"
+}
+
+
+### ✅ 8. UPDATE User
+PUT http://localhost:5044/users/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Updated Name",
+  "email": "updated@test.com"
+}
+
+
+### ❌ 9. UPDATE User (ID Mismatch)
+PUT http://localhost:5044/users/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": 2,
+  "name": "Wrong",
+  "email": "wrong@test.com"
+}
+
+
+### ❌ 10. UPDATE User (Not Found)
+PUT http://localhost:5044/users/999
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": 999,
+  "name": "NotFound",
+  "email": "nf@test.com"
+}
+
+
+### ✅ 11. DELETE User
+DELETE http://localhost:5044/users/1
+Authorization: Bearer {{token}}
+
+
+### ❌ 12. DELETE User (Not Found)
+DELETE http://localhost:5044/users/999
+Authorization: Bearer {{token}}
